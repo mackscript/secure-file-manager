@@ -1,0 +1,19 @@
+{
+  "name": "secure-file-vault",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "main": "dist/main/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "bun run build && electron ."
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^26.6.3",
+    "electron": "^44.4.5"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}
