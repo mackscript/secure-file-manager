@@ -2,34 +2,17 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Secure File Vault</title>
 </head>
 
 <body>
-    <h1>Secure File Vault</h1>
+    <div id="root"></div>
 
-    <p>Electron + TypeScript is working.</p>
-
-    <button id="messageButton">
-        Get Message From Main
-    </button>
-
-    <p id="result"></p>
-
-
-
-    <script>
-        const messageButton = document.getElementById("messageButton")
-
-        messageButton.addEventListener("click", async () => {
-
-            const message = await window.electronAPI.getMessase();
-
-            console.log('result :>> ', message);
-        })
-    </script>
+    <script type="module" src="./main.tsx"></script>
 </body>
 
 </html>

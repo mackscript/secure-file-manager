@@ -1,8 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("electronAPI", {
-    ping: (): string => "pong",
-    getMessase: () => {
-        return ipcRenderer.invoke('get-message')
-    }
+    getMessage: (): Promise<string> => {
+        return ipcRenderer.invoke("get-message");
+    },
 });

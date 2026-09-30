@@ -7,17 +7,25 @@
   "scripts": {
     "build:main": "tsc",
     "build:preload": "bun build ./src/preload/preload.ts --target=node --format=cjs --external electron --outfile=dist/preload/preload.cjs",
-    "build": "bun run build:main && bun run build:preload",
-    "start": "bun run build && electron .",
-    "dev:main": "tsc --watch",
-    "dev:preload": "bun build ./src/preload/preload.ts --target=node --format=cjs --external electron --outfile=dist/preload/preload.cjs --watch"
+    "build:renderer": "bun build ./src/renderer/main.tsx --outdir=dist/renderer --target=browser && sed 's/main.tsx/main.js/g' src/renderer/index.html > dist/renderer/index.html",
+    "build": "bun run build:main && bun run build:preload && bun run build:renderer",
+    "start": "bun run build && electron ."
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.2.0",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/bun": "latest",
     "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "electron": "^44.4.5"
   },
   "peerDependencies": {
     "typescript": "^7"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   }
 }

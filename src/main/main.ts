@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { initializeDatabase } from "../database/database.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,10 +27,11 @@ function createWindow(): void {
     });
 
     mainWindow.loadFile(
-        path.join(__dirname, "../../src/renderer/index.html")
+        path.join(__dirname, "../renderer/index.html")
     );
 }
 
 app.whenReady().then(() => {
+    initializeDatabase();
     createWindow();
 });
