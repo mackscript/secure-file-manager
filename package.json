@@ -5,8 +5,12 @@
   "private": true,
   "main": "dist/main/main.js",
   "scripts": {
-    "build": "tsc",
-    "start": "bun run build && electron ."
+    "build:main": "tsc",
+    "build:preload": "bun build ./src/preload/preload.ts --target=node --format=cjs --external electron --outfile=dist/preload/preload.cjs",
+    "build": "bun run build:main && bun run build:preload",
+    "start": "bun run build && electron .",
+    "dev:main": "tsc --watch",
+    "dev:preload": "bun build ./src/preload/preload.ts --target=node --format=cjs --external electron --outfile=dist/preload/preload.cjs --watch"
   },
   "devDependencies": {
     "@types/bun": "latest",

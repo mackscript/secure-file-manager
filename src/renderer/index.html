@@ -8,9 +8,28 @@
 </head>
 
 <body>
-
     <h1>Secure File Vault</h1>
-    <p>Electorn + TypeScreept is working</p>
+
+    <p>Electron + TypeScript is working.</p>
+
+    <button id="messageButton">
+        Get Message From Main
+    </button>
+
+    <p id="result"></p>
+
+
+
+    <script>
+        const messageButton = document.getElementById("messageButton")
+
+        messageButton.addEventListener("click", async () => {
+
+            const message = await window.electronAPI.getMessase();
+
+            console.log('result :>> ', message);
+        })
+    </script>
 </body>
 
 </html>
