@@ -2,7 +2,8 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { initializeDatabase } from "../database/database.js";
-
+import { getVaultPath } from "../filesystem/vault.js";
+import { importFile } from "../filesystem/vault.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -33,5 +34,9 @@ function createWindow(): void {
 
 app.whenReady().then(() => {
     initializeDatabase();
+    const vaultPath = getVaultPath()
+    importFile(
+        "/Users/mack/Documents/mack.jpeg"
+    );
     createWindow();
 });
