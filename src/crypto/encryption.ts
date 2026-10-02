@@ -23,18 +23,29 @@ let currentKeyring: RawAesKeyringNode | null = null;
 export function createKeyring(
     encryptionKey: Buffer
 ): RawAesKeyringNode {
+    const isolatedKey =
+        new Uint8Array(encryptionKey.length);
+
+    isolatedKey.set(encryptionKey);
 
     console.log(
-        "Creating keyring:",
-        encryptionKey.length
+        "Key byteOffset:",
+        isolatedKey.byteOffset
     );
 
-    currentKeyring = new RawAesKeyringNode({
-        keyName,
-        keyNamespace,
-        unencryptedMasterKey: encryptionKey,
-        wrappingSuite,
-    });
+    console.log(
+        "Key byteLength:",
+        isolatedKey.byteLength
+    );
+
+    currentKeyring =
+        new RawAesKeyringNode({
+            keyName,
+            keyNamespace,
+            unencryptedMasterKey:
+                isolatedKey,
+            wrappingSuite,
+        });
 
     return currentKeyring;
 }
@@ -59,12 +70,13 @@ export const {
 
 export async function encryptFile(
     fileData: Buffer,
-    encryptionKey: Buffer
+    // encryptionKey: Buffer
 ): Promise<Buffer> {
 
-    const keyring = createKeyring(
-        encryptionKey
-    );
+    // const keyring = createKeyring(
+    //     encryptionKey
+    // );
+    const keyring = getKeyring();
 
     const { result } = await encrypt(
         keyring,
@@ -77,13 +89,13 @@ export async function encryptFile(
 export async function decryptFile(
     encryptedData: Buffer
 ): Promise<Buffer> {
-
     const keyring = getKeyring();
 
-    const { plaintext } = await decrypt(
-        keyring,
-        encryptedData
-    );
+    const { plaintext } =
+        await decrypt(
+            keyring,
+            encryptedData
+        );
 
     return Buffer.from(plaintext);
 }

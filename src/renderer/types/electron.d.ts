@@ -21,6 +21,14 @@ declare global {
                     created_at: string;
                 }[]
             >;
+            restoreFile: (
+                encryptedName: string,
+                originalName: string
+            ) => Promise<boolean>;
+            deleteFile: (
+                id: number,
+                encryptedName: string
+            ) => Promise<boolean>
         };
 
     }

@@ -82,3 +82,19 @@ export function getAllFiles() {
 
   return statement.all();
 }
+
+export function deleteFileMetadata(
+  id: number
+): void {
+  const statement = db.prepare(`
+    DELETE FROM files
+    WHERE id = ?
+  `);
+
+  statement.run(id);
+
+  console.log(
+    "File metadata deleted from SQLite:",
+    id
+  );
+}

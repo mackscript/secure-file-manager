@@ -3,8 +3,10 @@ import path from 'node:path'
 import fs from "node:fs";
 
 import {
+    decryptFile,
     encryptFile,
 } from "../crypto/encryption.js";
+import { file } from 'bun';
 
 export function getVaultPath(): string {
 
@@ -46,7 +48,6 @@ export async function importFile(
 
     const encryptedData = await encryptFile(
         originalData,
-        encryptionKey
     );
 
     fs.writeFileSync(
@@ -55,3 +56,80 @@ export async function importFile(
     );
     return encryptedName;
 }
+
+export async function restoreFile(
+    encryptedName: string,
+    destinationPath: string
+): Promise<void> {
+
+    // vault folder path 
+    const vaultPath = getVaultPath()
+
+    // vault folder path -> full url 
+    const encryptedPath = path.join(
+        vaultPath,
+        encryptedName
+    )
+
+
+    if (!fs.existsSync(encryptedPath)) {
+        throw new Error(
+            "Encrypted file does not exist"
+        );
+    }
+
+    // read file 
+    const encryptedData = fs.readFileSync(encryptedPath)
+
+
+    // 
+    const decryptedData = await decryptFile(
+        encryptedData
+    );
+
+
+    //  save decrypted  file
+    fs.writeFileSync(
+        destinationPath,
+        decryptedData
+    );
+
+
+    console.log(
+        "File decrypted successfully:"
+    );
+
+    console.log(
+        "Restored to:",
+        destinationPath
+    );
+}
+
+
+export function deleteVaultFile(
+    encryptedName: string
+): void {
+
+    const vaultPath = getVaultPath()
+
+    const encryptedPath = path.join(
+        vaultPath,
+        encryptedName
+    )
+
+    if (!fs.existsSync(encryptedPath)) {
+        throw new Error(
+            "Encrypted file does not exist"
+        );
+    }
+
+    fs.unlinkSync(encryptedPath);
+
+
+
+    console.log(
+        "Encrypted file deleted:",
+        encryptedName
+    );
+}
+

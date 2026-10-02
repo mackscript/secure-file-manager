@@ -18,4 +18,17 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getFiles: () => {
         return ipcRenderer.invoke("get-files");
     },
+    restoreFile: (
+        encryptedName: string,
+        originalName: string
+    ): Promise<boolean> => {
+        return ipcRenderer.invoke("resotre-file", encryptedName, originalName)
+    },
+
+    deleteFile: (
+        id: number,
+        encryptedName: string
+    ): Promise<boolean> => {
+        return ipcRenderer.invoke("delete-file", id, encryptedName)
+    }
 });

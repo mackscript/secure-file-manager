@@ -1,14 +1,19 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllFiles, initializeDatabase, insertFileMetadata } from "../database/database.js";
-import { getVaultPath } from "../filesystem/vault.js";
+import { deleteFileMetadata, getAllFiles, initializeDatabase, insertFileMetadata } from "../database/database.js";
+import { deleteVaultFile, getVaultPath, restoreFile } from "../filesystem/vault.js";
 import { importFile } from "../filesystem/vault.js";
-import { decryptFile, generateEncryptionKey } from "../crypto/encryption.js";
+import { createKeyring, decryptFile, generateEncryptionKey } from "../crypto/encryption.js";
 import fs from "node:fs";
-
+import {
+    saveEncryptionKey,
+    getEncryptionKey,
+} from "../crypto/key-manager.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+
 let encryptionKey: Buffer;
 
 ipcMain.handle("get-message", () => {
@@ -52,6 +57,7 @@ ipcMain.handle("import-selected-file", async () => {
         sourcePath,
         encryptionKey
     )
+
     const originalName =
         path.basename(sourcePath);
 
@@ -76,6 +82,48 @@ ipcMain.handle(
     }
 );
 
+ipcMain.handle("resotre-file", async (
+    _event,
+    encryptedName: string,
+    originalName: string,
+) => {
+
+    const result = await dialog.showSaveDialog({
+        defaultPath: originalName,
+    })
+
+    if (result.canceled) {
+        return false;
+    }
+
+    const destinationPath = result.filePath
+
+    await restoreFile(
+        encryptedName,
+        destinationPath
+    )
+
+    return true
+
+})
+
+ipcMain.handle(
+    "delete-file",
+    async (
+        _event,
+        id: number,
+        encryptedName: string
+    ) => {
+
+
+        deleteVaultFile(encryptedName);
+
+
+        deleteFileMetadata(id);
+
+        return true;
+    }
+);
 
 function createWindow(): void {
     const mainWindow = new BrowserWindow({
@@ -99,8 +147,26 @@ function createWindow(): void {
 
 app.whenReady().then(async () => {
     initializeDatabase();
+    const existingKey =
+        await getEncryptionKey();
 
-    encryptionKey = generateEncryptionKey();
+    console.log('existingKey :>> ', existingKey);
+
+    if (existingKey) {
+        encryptionKey = existingKey;
+    } else {
+        encryptionKey =
+            generateEncryptionKey();
+
+        await saveEncryptionKey(
+            encryptionKey
+        );
+    }
+
+
+    createKeyring(encryptionKey);
+
+
     getVaultPath();
 
 
