@@ -8,9 +8,10 @@
     "build:main": "tsc",
     "build:preload": "bun build ./src/preload/preload.ts --target=node --format=cjs --external electron --outfile=dist/preload/preload.cjs",
     "build:renderer": "bun build ./src/renderer/main.tsx --outdir=dist/renderer --target=browser && sed 's/main.tsx/main.js/g' src/renderer/index.html > dist/renderer/index.html",
-    "build": "bun run build:main && bun run build:preload && bun run build:renderer",
+    "build": "bun run build:main && bun run build:preload && bun run build:renderer && bun run build:styles",
     "start": "bun run build && electron .",
-    "test:encryption": "bun build ./src/crypto/test-encryption.ts --target=node --format=esm --outfile=dist/test-encryption.js && node dist/test-encryption.js"
+    "test:encryption": "bun build ./src/crypto/test-encryption.ts --target=node --format=esm --outfile=dist/test-encryption.js && node dist/test-encryption.js",
+    "build:styles": "sass src/renderer/styles/app.scss dist/renderer/app.css"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.2.0",
@@ -19,7 +20,8 @@
     "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "electron": "^44.4.5"
+    "electron": "^44.4.5",
+    "sass": "^1.105.1"
   },
   "peerDependencies": {
     "typescript": "^7"
