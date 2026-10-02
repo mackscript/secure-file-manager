@@ -9,7 +9,8 @@
     "build:preload": "bun build ./src/preload/preload.ts --target=node --format=cjs --external electron --outfile=dist/preload/preload.cjs",
     "build:renderer": "bun build ./src/renderer/main.tsx --outdir=dist/renderer --target=browser && sed 's/main.tsx/main.js/g' src/renderer/index.html > dist/renderer/index.html",
     "build": "bun run build:main && bun run build:preload && bun run build:renderer",
-    "start": "bun run build && electron ."
+    "start": "bun run build && electron .",
+    "test:encryption": "bun build ./src/crypto/test-encryption.ts --target=node --format=esm --outfile=dist/test-encryption.js && node dist/test-encryption.js"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.2.0",

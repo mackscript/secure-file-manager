@@ -2,6 +2,9 @@ import { app } from 'electron'
 import path from 'node:path'
 import fs from "node:fs";
 
+import {
+    encryptFile,
+} from "../crypto/encryption.js";
 
 export function getVaultPath(): string {
 
@@ -22,29 +25,41 @@ export function getVaultPath(): string {
 
 }
 
-export function importFile(
-    sourcePath: string
-): string {
+export async function importFile(
+    sourcePath: string,
+    encryptionKey: Buffer
+): Promise<string> {
+    const vaultPath = getVaultPath();
 
-    const vaultPath = getVaultPath()
     const originalName = path.basename(sourcePath);
+
     const timestamp = Date.now();
+
     const encryptedName = `${timestamp}.enc`;
 
     const destinationPath = path.join(
         vaultPath,
         encryptedName
     );
-    fs.copyFileSync(
-        sourcePath,
-        destinationPath
+
+    const originalData = fs.readFileSync(
+        sourcePath
     );
 
-    console.log("File imported:");
+    const encryptedData = await encryptFile(
+        originalData,
+        encryptionKey
+    );
+
+    fs.writeFileSync(
+        destinationPath,
+        encryptedData
+    );
+
+    console.log("File encrypted and imported:");
+    console.log('destinationPath :>> ', destinationPath);
     console.log("Original:", originalName);
     console.log("Stored as:", encryptedName);
-    console.log('destinationPath :>> ', destinationPath);
 
     return encryptedName;
-
 }
