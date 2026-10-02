@@ -31,8 +31,6 @@ export async function importFile(
 ): Promise<string> {
     const vaultPath = getVaultPath();
 
-    const originalName = path.basename(sourcePath);
-
     const timestamp = Date.now();
 
     const encryptedName = `${timestamp}.enc`;
@@ -55,11 +53,5 @@ export async function importFile(
         destinationPath,
         encryptedData
     );
-
-    console.log("File encrypted and imported:");
-    console.log('destinationPath :>> ', destinationPath);
-    console.log("Original:", originalName);
-    console.log("Stored as:", encryptedName);
-
     return encryptedName;
 }

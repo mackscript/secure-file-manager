@@ -27,6 +27,7 @@
   "dependencies": {
     "@aws-crypto/client-node": "^5.0.2",
     "better-sqlite3": "^13.0.3",
+    "keytar": "^7.9.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   }

@@ -1,0 +1,226 @@
+:root {
+    --bg: #eef1f4;
+    --surface: #ffffff;
+    --ink: #16263a;
+    --ink-soft: #5b6b7e;
+    --line: #dbe1e8;
+    --steel: #1f3a5f;
+    --steel-hover: #284a78;
+    --brass: #b88a2e;
+    --brass-soft: #f6efdc;
+    --radius: 10px;
+    --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f1722;
+        --surface: #17212f;
+        --ink: #e8edf3;
+        --ink-soft: #92a1b3;
+        --line: #26354a;
+        --steel: #d9a93f;
+        --steel-hover: #e6b94f;
+        --brass: #d9a93f;
+        --brass-soft: #2a2415;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    line-height: 1.45;
+}
+
+.app {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+}
+
+/* Header */
+.app-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+}
+
+.app-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--steel);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    .btn-primary {
+        color: #1a1405;
+    }
+}
+
+.btn-primary:hover {
+    background: var(--steel-hover);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.btn-primary:focus-visible {
+    outline: 3px solid var(--brass);
+    outline-offset: 2px;
+}
+
+/* Count line */
+.file-count {
+    margin: 0 0 12px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+/* List */
+.file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.file-row {
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--brass);
+    border-radius: var(--radius);
+}
+
+.file-ext {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    background: var(--brass-soft);
+    color: var(--brass);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: lowercase;
+}
+
+.file-info {
+    min-width: 0;
+}
+
+.file-name {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-meta {
+    margin: 2px 0 0;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+}
+
+.file-encrypted {
+    margin: 6px 0 0;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--brass-soft);
+    color: var(--brass);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Empty state */
+.empty {
+    padding: 56px 24px;
+    text-align: center;
+    background: var(--surface);
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+}
+
+.empty-title {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.empty-text {
+    margin: 0;
+    color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .file-row {
+        grid-template-columns: 44px 1fr;
+    }
+
+    .file-ext {
+        width: 44px;
+        height: 44px;
+    }
+
+    .file-badge {
+        display: none;
+    }
+}
